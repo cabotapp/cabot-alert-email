@@ -22,7 +22,7 @@ Passing checks:{% for check in service.all_passing_checks %}
 """
 
 class EmailAlert(AlertPlugin):
-    name = "Email Plugin"
+    name = "Email"
     author = "Jonathan Balls"
 
     def send_alert(self, service, users, duty_officers):
@@ -45,6 +45,6 @@ class EmailAlert(AlertPlugin):
         send_mail(
             subject=subject,
             message=t.render(c),
-            from_email='Cabot <%s>' % settings.CABOT_FROM_EMAIL,
+            from_email='Cabot <%s>' % env.get('CABOT_FROM_EMAIL')
             recipient_list=emails,
         )
