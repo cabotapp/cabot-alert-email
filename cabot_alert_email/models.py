@@ -45,6 +45,6 @@ class EmailAlert(AlertPlugin):
         send_mail(
             subject=subject,
             message=t.render(c),
-            from_email='Cabot <%s>' % env.get('CABOT_FROM_EMAIL')
+            from_email='Cabot <%s>' % env.get('CABOT_FROM_EMAIL'),
             recipient_list=emails,
         )
