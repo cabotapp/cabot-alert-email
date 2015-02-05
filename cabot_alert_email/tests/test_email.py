@@ -31,10 +31,20 @@ class TestEmailAlerts(LocalTestCase):
 
         self.assertEqual(self.service.alerts.all().count(), 1)
 
-    @patch('cabot_alert_email.models.EmailAlert.send_mail')
+    @patch('cabot_alert_email.models.send_mail')
     def test_send_mail(self, fake_send_mail):
         self.service.overall_status = Service.PASSING_STATUS
         self.service.old_overall_status = Service.ERROR_STATUS
         self.service.save()
         self.service.alert()
-        fake_send_mail.assert_called_with(u'Service Service is back to normal: http://localhost/service/1/. @test_user_hipchat_alias', color='green', sender='Cabot/Service')
+        fake_send_mail.assert_called_with(message=u'Service Service http://localhost/service/1/ is back to normal.\n\n', subject='Service back to normal: Service', recipient_list=[u'test@userprofile.co.uk'], from_email='Cabot <cabot@example.com>')
+
+    @patch('cabot_alert_email.models.send_mail')
+    def test_failure_alert(self, fake_send_mail):
+        # Most recent failed
+        self.service.overall_status = Service.CALCULATED_FAILING_STATUS
+        self.service.old_overall_status = Service.PASSING_STATUS
+        self.service.save()
+        self.service.alert()
+        fake_send_mail.assert_called_with(message=u'Service Service http://localhost/service/1/ alerting with status: failing.\n\nCHECKS FAILING:\n\nPassing checks:\n  PASSING - Graphite Check - Type: Metric check - Importance: Error\n  PASSING - Http Check - Type: HTTP check - Importance: Critical\n  PASSING - Jenkins Check - Type: Jenkins check - Importance: Error\n\n\n', subject='failing status for service: Service', recipient_list=[u'test@userprofile.co.uk'], from_email='Cabot <cabot@example.com>')
+        
