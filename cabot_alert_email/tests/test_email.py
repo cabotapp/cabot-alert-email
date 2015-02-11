@@ -39,8 +39,8 @@ class TestEmailAlerts(LocalTestCase):
         self.service.alert()
         fake_send_mail.assert_called_with(message=u'Service Service http://localhost/service/1/ is back to normal.\n\n', subject='Service back to normal: Service', recipient_list=[u'test@userprofile.co.uk'], from_email='Cabot <cabot@example.com>')
 
-    @patch('cabot_alert_email.models.send_mail')
-    def test_failure_alert(self, fake_send_mail):
+    @patch('cabot_alert_email.models.send_mail'
+)    def test_failure_alert(self, fake_send_mail):
         # Most recent failed
         self.service.overall_status = Service.CALCULATED_FAILING_STATUS
         self.service.old_overall_status = Service.PASSING_STATUS
