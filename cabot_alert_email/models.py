@@ -26,7 +26,7 @@ class EmailAlert(AlertPlugin):
     author = "Jonathan Balls"
 
     def send_alert(self, service, users, duty_officers):
-        emails = [u.user.email for u in users]
+        emails = [u.email for u in users if u.email]
         if not emails:
             return
         c = Context({
@@ -36,7 +36,7 @@ class EmailAlert(AlertPlugin):
         })
         if service.overall_status != service.PASSING_STATUS:
             if service.overall_status == service.CRITICAL_STATUS:
-                emails += [u.email for u in duty_officers]
+                emails += [u.email for u in users if u.email]
             subject = '%s status for service: %s' % (
                 service.overall_status, service.name)
         else:
