@@ -27,6 +27,11 @@ class EmailAlertPlugin(AlertPlugin):
     author = "Jonathan Balls"
     version = "0.0.1"
 
+    plugin_variables = [
+        'ADMIN_EMAIL',
+        'CABOT_FROM_EMAIL'
+    ]
+
     def send_alert(self, service, users, duty_officers):
         emails = [u.email for u in users if u.email]
         if not emails:
