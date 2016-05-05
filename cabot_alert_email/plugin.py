@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
 
-from cabot.cabotapp.alert import AlertPlugin
+from cabot.plugins.models import AlertPlugin
 
 import requests
 import logging
@@ -21,9 +21,11 @@ Passing checks:{% for check in service.all_passing_checks %}
 {% endif %}
 """
 
-class EmailAlert(AlertPlugin):
+class EmailAlertPlugin(AlertPlugin):
     name = "Email"
+    slug = "email_plugin"
     author = "Jonathan Balls"
+    version = "0.0.1"
 
     def send_alert(self, service, users, duty_officers):
         emails = [u.email for u in users if u.email]
