@@ -23,9 +23,10 @@ Passing checks:{% for check in service.all_passing_checks %}
 
 class EmailAlertPlugin(AlertPlugin):
     name = "Email"
-    slug = "email_plugin"
+    slug = "email_alert"
     author = "Jonathan Balls"
     version = "0.0.1"
+    font_icon = "fa fa-envelope"
 
     plugin_variables = [
         'ADMIN_EMAIL',
