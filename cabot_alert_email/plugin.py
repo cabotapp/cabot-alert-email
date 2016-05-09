@@ -55,3 +55,4 @@ class EmailAlertPlugin(AlertPlugin):
             from_email='Cabot <%s>' % env.get('CABOT_FROM_EMAIL'),
             recipient_list=emails,
         )
+

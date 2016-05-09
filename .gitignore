@@ -1,3 +1,4 @@
 *.pyc
 dist/
 cabot_alert_email.egg-info/
+*sw?
