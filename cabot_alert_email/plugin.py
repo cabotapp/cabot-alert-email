@@ -23,7 +23,7 @@ Passing checks:{% for check in service.all_passing_checks %}
 
 class EmailAlertPlugin(AlertPlugin):
     name = "Email"
-    slug = "email_alert"
+    slug = "cabot_alert_email"
     author = "Jonathan Balls"
     version = "0.0.1"
     font_icon = "fa fa-envelope"

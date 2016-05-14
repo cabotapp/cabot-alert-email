@@ -12,7 +12,7 @@ class TestEmailAlerts(LocalTestCase):
 
         # Create email alert plugin and attach it to a service
         self.email_alert, created = AlertPluginModel.objects.get_or_create(
-                slug='email_alert')
+                slug='cabot_alert_email')
         self.service.alerts.add(self.email_alert)
         self.service.users_to_notify.add(self.user)
         self.service.save()
@@ -44,4 +44,4 @@ class TestEmailAlerts(LocalTestCase):
         self.service.old_overall_status = Service.PASSING_STATUS
         self.service.save()
         self.service.alert()
-        fake_send_mail.assert_called_with(message=u'Service Service http://localhost/service/1/ alerting with status: failing.\n\nCHECKS FAILING:\n\nPassing checks:\n  PASSING - Port Open Check for Service - Type:  - Importance: Error\n  PASSING - Port Open Check for Service - Type:  - Importance: Error\n\n\n', subject='failing status for service: Service', recipient_list=[u'test@userprofile.co.uk'], from_email='Cabot <cabot@example.com>')
+        fake_send_mail.assert_called_with(message=u'Service Service http://localhost/service/1/ alerting with status: failing.\n\nCHECKS FAILING:\n\nPassing checks:\n  PASSING - Port Open Check for Service - Type:  - Importance: Error\n  PASSING - Port Open Check for Service 2 - Type:  - Importance: Error\n\n\n', subject='failing status for service: Service', recipient_list=[u'test@userprofile.co.uk'], from_email='Cabot <cabot@example.com>')
