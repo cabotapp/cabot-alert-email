@@ -34,7 +34,7 @@ class EmailAlert(AlertPlugin):
         })
         if service.overall_status != service.PASSING_STATUS:
             if service.overall_status == service.CRITICAL_STATUS:
-                emails += [u.email for u in users if u.email]
+                emails += [u.email for u in duty_officers if u.email]
             subject = '%s status for service: %s' % (
                 service.overall_status, service.name)
         else:
