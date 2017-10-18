@@ -24,7 +24,7 @@ class EmailAlert(AlertPlugin):
     author = "Jonathan Balls"
 
     def send_alert(self, service, users, duty_officers):
-        emails = [u.email for u in users if u.email]
+        emails = set([u.email for u in users if u.email])
         if not emails:
             return
         c = Context({
@@ -34,7 +34,7 @@ class EmailAlert(AlertPlugin):
         })
         if service.overall_status != service.PASSING_STATUS:
             if service.overall_status == service.CRITICAL_STATUS:
-                emails += [u.email for u in duty_officers if u.email]
+                emails.update([u.email for u in duty_officers if u.email])
             subject = '%s status for service: %s' % (
                 service.overall_status, service.name)
         else:
@@ -44,5 +44,5 @@ class EmailAlert(AlertPlugin):
             subject=subject,
             message=t.render(c),
             from_email='Cabot <%s>' % env.get('CABOT_FROM_EMAIL'),
-            recipient_list=emails,
+            recipient_list=list(emails),
         )
