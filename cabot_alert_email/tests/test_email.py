@@ -1,9 +1,10 @@
-from cabot.cabotapp.tests.tests_basic import LocalTestCase
-from mock import Mock, patch
+from mock import patch
 
-from cabot.cabotapp.models import UserProfile, Service
-from cabot_alert_email import models
 from cabot.cabotapp.alert import update_alert_plugins
+from cabot.cabotapp.models import Service, UserProfile
+from cabot.cabotapp.tests.tests_basic import LocalTestCase
+
+from cabot_alert_email import models
 
 
 class TestEmailAlerts(LocalTestCase):
@@ -37,7 +38,12 @@ class TestEmailAlerts(LocalTestCase):
         self.service.old_overall_status = Service.ERROR_STATUS
         self.service.save()
         self.service.alert()
-        fake_send_mail.assert_called_with(message=u'Service Service http://localhost/service/1/ is back to normal.\n\n', subject='Service back to normal: Service', recipient_list=[u'test@userprofile.co.uk'], from_email='Cabot <cabot@example.com>')
+        fake_send_mail.assert_called_with(
+            message=u'Service Service http://localhost/service/1/ is back to normal.\n\n',
+            subject='Service back to normal: Service',
+            recipient_list=[u'test@userprofile.co.uk'],
+            from_email='Cabot <cabot@example.com>'
+        )
 
     @patch('cabot_alert_email.models.send_mail')
     def test_failure_alert(self, fake_send_mail):
@@ -46,5 +52,9 @@ class TestEmailAlerts(LocalTestCase):
         self.service.old_overall_status = Service.PASSING_STATUS
         self.service.save()
         self.service.alert()
-        fake_send_mail.assert_called_with(message=u'Service Service http://localhost/service/1/ alerting with status: failing.\n\nCHECKS FAILING:\n\nPassing checks:\n  PASSING - Graphite Check - Type: Metric check - Importance: Error\n  PASSING - Http Check - Type: HTTP check - Importance: Critical\n  PASSING - Jenkins Check - Type: Jenkins check - Importance: Error\n\n\n', subject='failing status for service: Service', recipient_list=[u'test@userprofile.co.uk'], from_email='Cabot <cabot@example.com>')
-        
+        fake_send_mail.assert_called_with(
+            message=u'Service Service http://localhost/service/1/ alerting with status: failing.\n\nCHECKS FAILING:\n\nPassing checks:\n  PASSING - Graphite Check - Type: Metric check - Importance: Error\n  PASSING - Http Check - Type: HTTP check - Importance: Critical\n  PASSING - Jenkins Check - Type: Jenkins check - Importance: Error\n\n\n',
+            subject='failing status for service: Service',
+            recipient_list=[u'test@userprofile.co.uk'],
+            from_email='Cabot <cabot@example.com>'
+        )
