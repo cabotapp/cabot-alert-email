@@ -25,8 +25,7 @@ class EmailAlert(AlertPlugin):
 
     def send_alert(self, service, users, duty_officers):
         emails = set([u.email for u in users if u.email])
-        if not emails:
-            return
+
         c = Context({
             'service': service,
             'host': settings.WWW_HTTP_HOST,
@@ -39,6 +38,8 @@ class EmailAlert(AlertPlugin):
                 service.overall_status, service.name)
         else:
             subject = 'Service back to normal: %s' % (service.name,)
+        if not emails:
+            return
         t = Template(email_template)
         send_mail(
             subject=subject,
